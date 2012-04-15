@@ -13,5 +13,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "db2excel"
   gem.require_paths = ["lib"]
-  gem.version       = Db2excel::VERSION
+  gem.version       = Db2Excel::VERSION
+
+  gem.add_dependency "multi_json"
 end

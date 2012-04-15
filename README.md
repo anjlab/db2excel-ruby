@@ -1,4 +1,4 @@
-# Db2excel
+# Db2Excel
 
 TODO: Write a gem description
 
