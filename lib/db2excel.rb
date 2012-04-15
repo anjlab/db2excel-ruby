@@ -1,17 +1,20 @@
 require 'db2excel/version'
 require 'open3'
 require 'multi_json'
+require 'tmpdir'
 
 module Db2Excel
 
   def create options={}
+
+    output_path = options[:output_path] || generate_temp_file
 
     args = {
       "connectionUrl"    => options[:connection_url] || active_record_to_jdbc_url,
       "jdbcDriver"       => options[:jdbc_driver]    || active_record_to_jdbc_driver,
       "query"            => options[:query],
       "templateFilePath" => options[:template_path],
-      "outputFilePath"   => options[:output_path],
+      "outputFilePath"   => output_path,
       "dataSheetIndex"   => options[:data_sheet_index] || 0
     }
 
@@ -23,6 +26,8 @@ module Db2Excel
       stdin.close
       exit_status = wait_thr.value
     end
+
+    output_path
   end
 
   def active_record_to_jdbc_url spec = ActiveRecord::Base.connection_config
@@ -42,6 +47,8 @@ module Db2Excel
       end
 
       "jdbc:postgresql://#{spec[:host]}/#{spec[:database]}#{args_str}"
+    else
+      "TODO: support others"
     end
   end
 
@@ -52,6 +59,10 @@ module Db2Excel
     else
       "TODO: support others"
     end
+  end
+
+  def generate_temp_file
+    Dir.mktmpdir + "/output.xls"
   end
 
   extend self
